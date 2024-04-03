@@ -67,9 +67,9 @@ class _MyAppState extends State<MyApp> {
                 // We also handle the message potentially returning null.
                 try {
                   message  =
-                      await TelrPaymentGateway.callTelRForTransaction(
-                        store_id: "30059",
-                        key: "tkLFk#Hd7t~ZtprB",
+                       await TelrPaymentGateway.callTelRForTransaction(
+                        store_id: "storeId",
+                        key: "authKey",
                         amount: "20",
                         app_install_id: "123456",
                         app_name: "TelR",
@@ -89,7 +89,7 @@ class _MyAppState extends State<MyApp> {
                         bill_first_name: "Groupies ",
                         bill_last_name: "test",
                         bill_title: "Mr",
-                        bill_email: "groupies@test.com",
+                        bill_email: "test@test.com",
                         bill_phone: "528636596",
                       ) ?? 'Unknown Message';
                 } on PlatformException {
