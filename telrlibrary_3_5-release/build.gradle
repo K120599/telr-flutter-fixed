@@ -1,2 +1,0 @@
-configurations.maybeCreate("default")
-artifacts.add("default", file('telrlibrary_3_5-release.aar'))
