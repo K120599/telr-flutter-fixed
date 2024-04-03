@@ -5,7 +5,7 @@ A new Flutter project.
 ## Getting Started
 
 * Add these in pubspec.yaml
-# The following section is specific to Flutter packages.
+The following section is specific to Flutter packages.
 flutter:
 
   plugin:
