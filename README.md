@@ -17,8 +17,9 @@ flutter:
         pluginClass: TelrPaymentGatewayPlugin
       ios:
         pluginClass: TelrPaymentGatewayPlugin
-
+```
 ## How To Use
+```dart
  try {
       message  =
           await TelrPaymentGateway.callTelRForTransaction(
