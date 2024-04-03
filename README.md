@@ -4,10 +4,12 @@ A new Flutter project.
 
 ## Getting Started
 
-* Add these in pubspec.yaml
-The following section is specific to Flutter packages.
-flutter:
+To use this plugin in your Flutter project, follow these steps:
 
+1. Add the plugin to your `pubspec.yaml` file:
+
+```yaml
+flutter:
   plugin:
     platforms:
       android:
