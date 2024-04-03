@@ -67,9 +67,9 @@ class _MyAppState extends State<MyApp> {
                 // We also handle the message potentially returning null.
                 try {
                   message  =
-                      await TelrPaymentGateway.callTelRForTransaction(
+                       await TelrPaymentGateway.callTelRForTransaction(
                         store_id: "storeId",
-                        key: "key",
+                        key: "authKey",
                         amount: "20",
                         app_install_id: "123456",
                         app_name: "TelR",
