@@ -1,4 +1,4 @@
-# telr_test_plugin
+# telr_flutter_fixed
 
 A new Flutter project.
 
