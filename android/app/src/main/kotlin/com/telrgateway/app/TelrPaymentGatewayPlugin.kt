@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Parcelable
 import android.util.Log
 import androidx.annotation.NonNull
+import com.google.gson.Gson
 import com.telr.mobile.sdk.activity.WebviewActivity
 import com.telr.mobile.sdk.entity.request.payment.*
 import com.telr.mobile.sdk.entity.response.payment.MobileResponse
@@ -94,7 +95,7 @@ class TelrPaymentGatewayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
             bill_address,bill_first_name,bill_last_name,bill_title,bill_email,bill_phone))
     intent.putExtra(WebviewActivity.SUCCESS_ACTIVTY_CLASS_NAME, "com.telr.telr_payment_gateway.SuccessTransationActivity")
     intent.putExtra(WebviewActivity.FAILED_ACTIVTY_CLASS_NAME, "com.telr.telr_payment_gateway.FailedTransationActivity")
-    intent.putExtra(WebviewActivity.IS_SECURITY_ENABLED, true)
+    intent.putExtra(WebviewActivity.IS_SECURITY_ENABLED, true) 
     activity.startActivityForResult(intent, 100)
   }
   
@@ -174,19 +175,31 @@ class TelrPaymentGatewayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
       val paymentMethod: String = intent?.getStringExtra("auth")!!
       if (paymentMethod.equals("yes", ignoreCase = true)) {
         val status = intent.getParcelableExtra<Parcelable>(WebviewActivity.PAYMENT_RESPONSE) as MobileResponse?
-
-        if(status?.auth!=null) {
-          this.result.success(status.getAuth().getTranref())
-          Log.e("Transaction Ref", status.getAuth().getTranref())
+    
+        if (status?.auth != null) {
+            val authData = HashMap<String, Any>()
+            authData["status"] = status.getAuth().getStatus()
+            authData["code"] = status.getAuth().getCode()
+            authData["message"] = status.getAuth().getMessage()
+            val gson = Gson()
+            val jsonString = gson.toJson(authData)
+            this.result.success(jsonString)
+            Log.e("Transaction Ref failed", authData.toString())
         }
-      }
-      else {
+    } else {
         val status = intent.getParcelableExtra<Parcelable>(WebviewActivity.PAYMENT_RESPONSE) as StatusResponse?
-        if(status?.auth!=null) {
-          Log.e("Transaction Ref111", status.getAuth().getTranref())
-          this.result.success(status.getAuth().getTranref())
+        if (status?.auth != null) {
+            val authData = HashMap<String, Any>()
+            authData["status"] = status.getAuth().getStatus()
+            authData["code"] = status.getAuth().getCode()
+            authData["message"] = status.getAuth().getMessage()
+            authData["tranref"] = status.getAuth().getTranref()
+            val gson = Gson()
+            val jsonString = gson.toJson(authData)
+            this.result.success(jsonString)
+            Log.e("Transaction Ref complete", authData.toString())
         }
-      }
+    }
       return  true
     }
     return false

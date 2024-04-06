@@ -8,5 +8,6 @@
     <application
         android:label="telr_test_plugin"
         android:name="${applicationName}"
-        tools:replace="android:label, android:name" />
+        
+         />
 </manifest>
