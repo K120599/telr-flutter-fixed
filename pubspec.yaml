@@ -37,11 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   package_rename: ^1.5.3
   change_app_package_name: ^1.1.0
-  device_info_plus: ^9.1.2
-  # telr_flutter:
-  #   git:
-  #     url: https://github.com/K120599/TelrFlutterForked
-      
+  
 
 
 dev_dependencies:
@@ -74,13 +70,7 @@ flutter:
         pluginClass: TelrPaymentGatewayPlugin
       ios:
         pluginClass: TelrPaymentGatewayPlugin
-  # plugin:
-  #   platforms:
-  #     android: 
-  #       package: com.innovationcodes.telr_flutter
-  #       pluginClass: TelrFlutterPlugin
-  #     ios:
-  #       pluginClass: TelrFlutterPlugin
+  
 
   # To add assets to your application, add an assets section, like this:
   # assets:
