@@ -201,6 +201,16 @@ class TelrPaymentGatewayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
         }
     }
       return  true
+    }else{
+          val authData = HashMap<String, Any>()
+          authData["status"] = "U"
+          authData["code"] = "400"
+          authData["message"] = "Unknown State"
+          authData["tranref"] = "Null"
+          val gson = Gson()
+          val jsonString = gson.toJson(authData)
+          this.result.success(jsonString)
+      
     }
     return false
   }
