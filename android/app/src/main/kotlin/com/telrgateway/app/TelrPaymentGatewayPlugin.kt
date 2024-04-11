@@ -1,4 +1,4 @@
-package com.telrgateway.app
+package com.example.jammah
 
 //import androidx.annotation.NonNull
 //import android.support.annotation.NonNull;
@@ -70,10 +70,12 @@ class TelrPaymentGatewayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
       var bill_title : String = call.argument<String>("bill_title")!!
       var bill_email : String = call.argument<String>("bill_email")!!
       var bill_phone : String = call.argument<String>("bill_phone")!!
+        var token : String = call.argument<String>("token")!!
+        var custref : String = call.argument<String>("customerRef")!!
 
       sendMessage(key,store_id,amount,app_install_id,app_name,app_user_id,app_version,sdk_version,mode,
               tran_type,tran_cart_id,desc,tran_language,tran_currency,bill_city,bill_country,bill_region,
-              bill_address,bill_first_name,bill_last_name,bill_title,bill_email,bill_phone)
+              bill_address,bill_first_name,bill_last_name,bill_title,bill_email,bill_phone,custref,token)
     } else {
       result.notImplemented()
     }
@@ -87,30 +89,53 @@ class TelrPaymentGatewayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
                   app_user_id:String,app_version:String,sdk_version:String,mode:String,tran_type:String,tran_cart_id:String,
                   desc:String,tran_language:String,tran_currency:String,bill_city:String,
                   bill_country:String,bill_region:String,bill_address:String,bill_first_name:String,
-                  bill_last_name:String,bill_title:String,bill_email:String,bill_phone:String)
+                  bill_last_name:String,bill_title:String,bill_email:String,bill_phone:String,custref:String, token: String,)
   {
     val intent = Intent(activity, WebviewActivity::class.java)
     intent.putExtra(WebviewActivity.EXTRA_MESSAGE, getMobileRequest(key,store_id,amount,app_install_id,app_name,app_user_id,app_version,sdk_version,mode,
             tran_type,tran_cart_id,desc,tran_language,tran_currency,bill_city,bill_country,bill_region,
-            bill_address,bill_first_name,bill_last_name,bill_title,bill_email,bill_phone))
-    intent.putExtra(WebviewActivity.SUCCESS_ACTIVTY_CLASS_NAME, "com.telr.telr_payment_gateway.SuccessTransationActivity")
-    intent.putExtra(WebviewActivity.FAILED_ACTIVTY_CLASS_NAME, "com.telr.telr_payment_gateway.FailedTransationActivity")
+            bill_address,bill_first_name,bill_last_name,bill_title,bill_email,bill_phone,custref,token))
+      intent.putExtra(WebviewActivity.TOKENFLAG, token) // Pass the token to WebviewActivity
+    intent.putExtra(WebviewActivity.SUCCESS_ACTIVTY_CLASS_NAME, "com.example.jammah.SuccessTransationActivity")
+    intent.putExtra(WebviewActivity.FAILED_ACTIVTY_CLASS_NAME, "com.example.jammah.FailedTransationActivity")
     intent.putExtra(WebviewActivity.IS_SECURITY_ENABLED, true) 
     activity.startActivityForResult(intent, 100)
-  }
+  } 
   
-  fun getMobileRequest(key:String,store_id:String,amount:String,app_install_id:String,app_name:String,
-                       app_user_id:String,app_version:String,sdk_version:String,mode:String,tran_type:String,tran_cart_id:String,
-                       desc:String,tran_language:String,tran_currency:String,bill_city:String,
-                       bill_country:String,bill_region:String,bill_address:String,bill_first_name:String,
-                       bill_last_name:String,bill_title:String,bill_email:String,bill_phone:String) : MobileRequest {
+  fun getMobileRequest(
+      key: String,
+      store_id: String,
+      amount: String,
+      app_install_id: String,
+      app_name: String,
+      app_user_id: String,
+      app_version: String,
+      sdk_version: String,
+      mode: String,
+      tran_type: String,
+      tran_cart_id: String,
+      desc: String,
+      tran_language: String,
+      tran_currency: String,
+      bill_city: String,
+      bill_country: String,
+      bill_region: String,
+      bill_address: String,
+      bill_first_name: String,
+      bill_last_name: String,
+      bill_title: String,
+      bill_email: String,
+      bill_phone: String,
+      custref: String,
+      token: String
+  ) : MobileRequest {
     val mobile = MobileRequest()
 //    mobile.setStore("25798") // Store ID
 //    mobile.setKey("Nbsw5^mDR5@3m9Nc") // Authentication Key : The Authentication Key will be supplied by Telr as part of the Mobile API setup process after you request that this integration type is enabled for your account. This should not be stored permanently within the App.
 
     mobile.setStore(store_id) // Store ID
     mobile.setKey(key) // Authentication Key : The Authentication Key will be supplied by Telr as part of the Mobile API setup process after you request that this integration type is enabled for your account. This should not be stored permanently within the App.
-
+    mobile.setCustref(custref)
     val app = App()
     app.setId(app_install_id) // Application installation ID
     app.setName(app_name) // Application name
@@ -147,7 +172,10 @@ class TelrPaymentGatewayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
     billing.setName(name)
     billing.setEmail(bill_email)
     billing.setPhone(bill_phone)
+
     mobile.setBilling(billing)
+
+
 
     return mobile
   }
@@ -197,11 +225,12 @@ class TelrPaymentGatewayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
             val gson = Gson()
             val jsonString = gson.toJson(authData)
             this.result.success(jsonString)
-            Log.e("Transaction Ref complete", authData.toString())
+            Log.e("Transaction complete", authData.toString())
         }
     }
       return  true
-    }else{
+    }
+    else if(requestCode == 100){
           val authData = HashMap<String, Any>()
           authData["status"] = "U"
           authData["code"] = "400"
